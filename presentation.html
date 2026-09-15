@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en"><head>
-<script src="presentation_files/libs/clipboard/clipboard.min.js"></script>
 <script src="presentation_files/libs/quarto-html/tabby.min.js"></script>
 <script src="presentation_files/libs/quarto-html/popper.min.js"></script>
 <script src="presentation_files/libs/quarto-html/tippy.umd.min.js"></script>
@@ -49,7 +48,7 @@
     div.csl-indent {
       margin-left: 2em;
     }  </style>
-  <link rel="stylesheet" href="presentation_files/libs/revealjs/dist/theme/quarto-2f366650f320edcfcf53d73c80250a32.css">
+  <link rel="stylesheet" href="presentation_files/libs/revealjs/dist/theme/quarto-d9802abce10ffef554c625d2b21cdee4.css">
   <link href="presentation_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="presentation_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="presentation_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -159,9 +158,16 @@
 
 </section>
 <section>
-<section id="dynamic-structural-equation-models" class="title-slide slide level1 center">
-<h1>Dynamic Structural Equation Models</h1>
-<p>DSEM, multilevel dynamic factor models <span class="citation" data-cites="asparouhovDynamicStructuralEquation2018">(<a href="#/references" role="doc-biblioref" onclick="">Asparouhov, Hamaker, and Muthén 2018</a>)</span>.</p>
+<section id="dynamic-structural-equation-models-dsem" class="title-slide slide level1 center">
+<h1>Dynamic Structural Equation Models (DSEM)</h1>
+<p>Multilevel models for intensive longitudinal data <span class="citation" data-cites="asparouhovDynamicStructuralEquation2018">(<a href="#/references" role="doc-biblioref" onclick="">Asparouhov, Hamaker, and Muthén 2018</a>)</span></p>
+</section>
+<section id="response" class="slide level2">
+<h2>Response</h2>
+<p><span class="math display">\[\boldsymbol{y}_{it}\]</span></p>
+<div class="fragment">
+<p><img data-src="ild_illustration.png"></p>
+</div>
 </section>
 <section id="response-decomposition" class="slide level2">
 <h2>Response decomposition</h2>
@@ -171,39 +177,23 @@
 </section>
 <section id="within-level-model" class="slide level2">
 <h2>Within-level model</h2>
+<p>Measurement model:</p>
 <p><span class="math display">\[
-\begin{aligned}
-        \boldsymbol{y}_{1,it}    &amp; = \boldsymbol{\nu}_{1,it} + \boldsymbol{\Lambda}_{1,it}(L) \boldsymbol{\eta}_{1,it} + \boldsymbol{R}_{it}(L) \boldsymbol{y}_{1,it} + \boldsymbol{K}_{1,it} \boldsymbol{X}_{1,it} + \boldsymbol{\epsilon}_{1,it} \\
-        \boldsymbol{\eta}_{1,it} &amp; = \boldsymbol{\alpha}_{1,it} + \boldsymbol{B}_{1,it}(L) \boldsymbol{\eta}_{1,it} + \boldsymbol{Q}_{it}(L) \boldsymbol{y}_{1,it} + \boldsymbol{\Gamma}_{1,it} \boldsymbol{X}_{1,it} + \boldsymbol{\xi}_{1,it},
-    \end{aligned}
+\boldsymbol{y}_{1,it}     = \boldsymbol{\nu}_{1,it} + \boldsymbol{\Lambda}_{1,it}(K) \boldsymbol{\eta}_{1,it} + \boldsymbol{R}_{it}(K) \boldsymbol{y}_{1,it} + \boldsymbol{K}_{1,it} \boldsymbol{X}_{1,it} + \boldsymbol{\epsilon}_{1,it}
 \]</span></p>
-<div class="fragment">
-<p>where</p>
+<p>Structural model:</p>
 <p><span class="math display">\[
-\begin{aligned}
-&amp;\boldsymbol{\Lambda}_{1,it}(L) = \sum_{l=0}^{L} \boldsymbol{\Lambda}_{1,lit} L^{l}, \quad \boldsymbol{R}_{it}(L) = \sum_{l=0}^{L} \boldsymbol{R}_{lit} L^{l}, \\
-&amp;\quad  \boldsymbol{B}_{1,it}(L) = \sum_{l=0}^{L} \boldsymbol{B}_{1,lit} L^{l}, \quad \boldsymbol{Q}_{it}(L) = \sum_{l=0}^{L} \boldsymbol{Q}_{lit} L^{l}
-\end{aligned}
+\boldsymbol{\eta}_{1,it}  = \boldsymbol{\alpha}_{1,it} + \boldsymbol{B}_{1,it}(K) \boldsymbol{\eta}_{1,it} + \boldsymbol{Q}_{it}(K) \boldsymbol{y}_{1,it} + \boldsymbol{\Gamma}_{1,it} \boldsymbol{X}_{1,it} + \boldsymbol{\xi}_{1,it}
 \]</span></p>
-</div>
+<p>with polynomial matrices <span class="math inline">\(\boldsymbol{X}(L) = \sum_{l=0}^{K} \boldsymbol{X}_{l} L^{l}\)</span>.</p>
 </section>
-<section id="between-participants-model" class="slide level2">
-<h2>Between-participants model</h2>
-<p><span class="math display">\[
-\begin{aligned}
-        \boldsymbol{y}_{2,i}    &amp; = \boldsymbol{\nu}_{2} + \boldsymbol{\Lambda}_{2} \boldsymbol{\eta}_{2,i} + \boldsymbol{K}_{2}\boldsymbol{X}_{2,i} + \boldsymbol{\epsilon}_{2,i} \\
-        \boldsymbol{\eta}_{2,i} &amp; = \boldsymbol{\alpha}_{2} + \boldsymbol{B}_{2} \boldsymbol{\eta}_{2,i} + \boldsymbol{\Gamma}_{2} \boldsymbol{X}_{2,i} + \boldsymbol{\xi}_{2,i},
-    \end{aligned}
-\]</span></p>
-</section>
-<section id="between-timepoints-model" class="slide level2">
-<h2>Between-timepoints model</h2>
-<p><span class="math display">\[
-\begin{aligned}
-        \boldsymbol{y}_{3,t}    &amp; = \boldsymbol{\nu}_{3} + \boldsymbol{\Lambda}_{3} \boldsymbol{\eta}_{3,t} + \boldsymbol{K}_{3} \boldsymbol{X}_{3,t} + \boldsymbol{\epsilon}_{3,t} \\
-        \boldsymbol{\eta}_{3,t} &amp; = \boldsymbol{\alpha}_{3} + \boldsymbol{B}_{3}\boldsymbol{\eta}_{3,t} + \boldsymbol{\Gamma}_{3}\boldsymbol{X}_{3,t} + \boldsymbol{\xi}_{3,t}.
-    \end{aligned}
-\]</span></p>
+<section id="further-components" class="slide level2">
+<h2>Further components</h2>
+<ul>
+<li>Between-participants model</li>
+<li>Between-timepoints model</li>
+<li>Priors for population-level parameters</li>
+</ul>
 </section></section>
 <section>
 <section id="estimation-of-dsems" class="title-slide slide level1 center">
@@ -212,21 +202,30 @@
 </section>
 <section id="original-algorithm-mplus" class="slide level2">
 <h2>Original algorithm (Mplus)</h2>
+<p>13-block Metropolis-within-Gibbs, which samples:</p>
 <ul>
-<li>Sample population-level parameters: <span class="math inline">\(\mathcal{O}(1)\)</span></li>
-<li>Sample individual-specific parameters: <span class="math inline">\(\mathcal{O}(N)\)</span></li>
-<li>Sample timepoint-specific parameters: <span class="math inline">\(\mathcal{O}(T)\)</span></li>
-<li>Sample within-level latent traits: <span class="math inline">\(\mathcal{O}(N \times T)\)</span></li>
+<li><span class="math inline">\(\mathcal{O}(1)\)</span> population-level parameters.</li>
+<li><span class="math inline">\(\mathcal{O}(N)\)</span> individual-specific parameters.</li>
+<li><span class="math inline">\(\mathcal{O}(T)\)</span> timepoint-specific parameters.</li>
+<li><span class="math inline">\(\mathcal{O}(N \times T)\)</span> within-level latent traits.</li>
 </ul>
 <p>Stan implementations <span class="citation" data-cites="holtmannModelingWithinlevelLatent2025">(<a href="#/references" role="doc-biblioref" onclick="">Holtmann and Koslowski 2025</a>)</span> have used the same set-up.</p>
+</section>
+<section id="practical-consequence" class="slide level2">
+<h2>Practical Consequence</h2>
+<ul>
+<li>Define the dynamics in terms of latent traits and use a measurement model, and you’ll need to sample <span class="math inline">\(\mathcal{O}(N \times T)\)</span> parameters in each MCMC iteration.</li>
+<li>Define the dynamics in terms of sumscores, and you’ll need to sample <span class="math inline">\(\mathcal{O}(N + T)\)</span> parameters in each MCMC iteration.</li>
+</ul>
 </section></section>
 <section>
-<section id="can-we-scale-it-better" class="title-slide slide level1 center">
-<h1>Can we scale it better?</h1>
+<section id="can-we-do-better" class="title-slide slide level1 center">
+<h1>Can we do better?</h1>
 
 </section>
 <section id="theorem" class="slide level2">
 <h2>Theorem</h2>
+<p>Within-level model</p>
 <p><span class="math display">\[
 \begin{aligned}
         \boldsymbol{y}_{1,it}    &amp; = \boldsymbol{\nu}_{1,it} + \boldsymbol{\Lambda}_{1,it}(L) \boldsymbol{\eta}_{1,it} + \boldsymbol{R}_{it}(L) \boldsymbol{y}_{1,it} + \boldsymbol{K}_{1,it} \boldsymbol{X}_{1,it} + \boldsymbol{\epsilon}_{1,it} \\
@@ -234,7 +233,7 @@
     \end{aligned}
 \]</span></p>
 <div class="fragment">
-<p>can be written as a linear Gaussian state-space model</p>
+<p>can be written as a linear Gaußian state-space model</p>
 <p><span class="math display">\[
 \begin{aligned}
         \boldsymbol{y}_{1,it}               &amp; = \boldsymbol{Z}_{it} \tilde{\boldsymbol{\eta}}_{1,it} + \boldsymbol{d}_{it} + \boldsymbol{v}_{it}, \quad \boldsymbol{v}_{it} \sim \mathcal{N}\left(\boldsymbol{0}, \boldsymbol{H}_{it}\right)                      \\
@@ -242,17 +241,19 @@
         \tilde{\boldsymbol{\eta}}_{1,i1}    &amp; = \boldsymbol{\xi}_{i}, \quad \boldsymbol{\xi}_{i} \sim \mathcal{N}\left(\boldsymbol{a}_{i1}, \boldsymbol{P}_{i1}\right),
     \end{aligned}
 \]</span></p>
-<p>after some pretty tedious algebra.</p>
+<p>with augmented latent states <span class="math inline">\(\tilde{\boldsymbol{\eta}}_{1,it}\)</span> after some pretty tedious algebra.</p>
 </div>
 </section>
-<section id="marginalization" class="slide level2">
-<h2>Marginalization</h2>
-<p>Having the within-level model on state-space form lets us:</p>
+<section id="marginal-hmc" class="slide level2">
+<h2>Marginal HMC</h2>
+<p>Using the theorem we can:</p>
+<div>
 <ul>
-<li>Integrate out the within-level latent variables with a Kalman filter.</li>
-<li>Use a sampler which targets the marginal posterior.</li>
-<li>From <span class="math inline">\(\mathcal{O}(N \times T)\)</span> down to <span class="math inline">\(\mathcal{O}(N + T)\)</span>.</li>
+<li class="fragment">Exactly and deterministically integrate over the latent variables using a Kalman filter.</li>
+<li class="fragment">Target the marginal posterior with Hamiltonian Monte Carlo.</li>
+<li class="fragment">Sample <span class="math inline">\(\mathcal{O}(N + T)\)</span> rather than <span class="math inline">\(\mathcal{O}(N \times T)\)</span> and hence make latent variable modeling feasible.</li>
 </ul>
+</div>
 </section></section>
 <section>
 <section id="experiments" class="title-slide slide level1 center">
@@ -308,12 +309,7 @@
 <p><span class="math display">\[
 \begin{aligned}
         \boldsymbol{y}_{1,it}    &amp; =
-        \begin{bmatrix}
-            \lambda_{1,it} &amp; 0 \\
-            \lambda_{2,it} &amp; 0 \\
-            \lambda_{3,it} &amp; 0 \\
-            0              &amp; 1
-        \end{bmatrix}
+        \boldsymbol{\Lambda}_{it}
         \boldsymbol{\eta}_{1,it}
         + \boldsymbol{\epsilon}_{1,it} , \quad \boldsymbol{\epsilon}_{1,it} \sim \mathcal{N}(\boldsymbol{0}, \boldsymbol{\Sigma}_{1,i})                                              \\
         \boldsymbol{\eta}_{1,it} &amp; = \boldsymbol{\Phi}_{1,i} \boldsymbol{\eta}_{1,i,t-1} + \boldsymbol{\xi}_{1,it}, \quad \boldsymbol{\xi}_{1,it} \sim \mathcal{N}(\boldsymbol{0}, \boldsymbol{\Psi}_{1,i}),
@@ -326,25 +322,27 @@
 
 <img data-src="eg5-efficiency.png" class="r-stretch"></section></section>
 <section>
-<section id="beyond-conditionally-gaussian" class="title-slide slide level1 center">
-<h1>Beyond Conditionally Gaussian</h1>
+<section id="beyond-conditionally-gaußian" class="title-slide slide level1 center">
+<h1>Beyond Conditionally Gaußian</h1>
 
 </section>
 <section id="hybrid-nuts-gibbs-sampler" class="slide level2">
 <h2>Hybrid NUTS-Gibbs Sampler</h2>
-<p>For categorical responses we can use a similar state-space formulation and do:</p>
-<ol type="1">
-<li><strong>Gibbs</strong>: sample within-level latent trait using FFBS.</li>
-<li><strong>Data augmentation</strong>: sample latent responses from the normal distribution with a probit link <span class="citation" data-cites="albertBayesianAnalysisBinary1993">(<a href="#/references" role="doc-biblioref" onclick="">Albert and Chib 1993</a>)</span> or the Pólya-Gamma distribution with a logit link <span class="citation" data-cites="polsonBayesianInferenceLogistic2013">(<a href="#/references" role="doc-biblioref" onclick="">Polson, Scott, and Windle 2013</a>)</span>.</li>
-<li><strong>NUTS</strong>: run one step of NUTS targeting the marginal posterior.</li>
+<p>For categorical responses we can combine two Gibbs steps with one NUTS step:</p>
+<ul>
+<li>Gibbs 1: Sample within-level latent trait using forward-filtering backward sampling <span class="citation" data-cites="fruhwirth-schnatterDataAugmentationDynamic1994">(<a href="#/references" role="doc-biblioref" onclick="">Frühwirth-Schnatter 1994</a>)</span>.</li>
+</ul>
+<ol start="2" type="1">
+<li>Gibbs 2: Sample latent responses from truncated normal <span class="citation" data-cites="albertBayesianAnalysisBinary1993">(<a href="#/references" role="doc-biblioref" onclick="">Albert and Chib 1993</a>)</span> or Pólya-Gamma distribution <span class="citation" data-cites="polsonBayesianInferenceLogistic2013">(<a href="#/references" role="doc-biblioref" onclick="">Polson, Scott, and Windle 2013</a>)</span>.</li>
+<li>NUTS/HMC: Run one step targeting the marginal posterior with latent responses.</li>
 </ol>
 </section>
 <section id="hybrid-nuts-gibbs-sampler-1" class="slide level2">
 <h2>Hybrid NUTS-Gibbs Sampler</h2>
 <ul>
-<li>Stan does not support HMC-within-Gibbs. Using NumPyro instead.</li>
-<li>Works well for binary responses.</li>
-<li>Fails completely for ordinal responses, due to a well-known issue <span class="citation" data-cites="cowlesAcceleratingMonteCarlo1996">(<a href="#/references" role="doc-biblioref" onclick="">Cowles 1996</a>)</span>.</li>
+<li>Still <span class="math inline">\(\mathcal{O}(N \times T)\)</span> due to latent responses.</li>
+<li>Cannot use Stan, but NumPyro is a really good alternative.</li>
+<li>Useless for ordinal responses because thresholds are extremely correlated with latent responses <span class="citation" data-cites="cowlesAcceleratingMonteCarlo1996">(<a href="#/references" role="doc-biblioref" onclick="">Cowles 1996</a>)</span>.</li>
 </ul>
 </section>
 <section id="five-indiciator-binary-response-ar1" class="slide level2">
@@ -358,16 +356,18 @@
 <section>
 <section id="going-further" class="title-slide slide level1 center">
 <h1>Going Further</h1>
-<p>Ordinal responses is the main use case of DSEM and the only published algorithm is <span class="citation" data-cites="asparouhovDynamicStructuralEquation2018">Asparouhov, Hamaker, and Muthén (<a href="#/references" role="doc-biblioref" onclick="">2018</a>)</span> which scales <span class="math inline">\(\mathcal{O}(N \times T)\)</span>.</p>
+<p>Ordinal responses is the dominating use case and still lacks good algorithms.</p>
 </section>
-<section id="ordinal-data-dsem" class="slide level2">
-<h2>Ordinal Data DSEM</h2>
-<p>Better computational scaling likely requires compromise:</p>
+<section id="ordinal-dsem" class="slide level2">
+<h2>Ordinal DSEM</h2>
+<p>Better computational scaling requires compromise:</p>
+<div>
 <ul>
-<li>Laplace approximations which don’t cause autodiff to explode?? <span class="citation" data-cites="margossianGeneralAdjointdifferentiatedLaplace2023">(<a href="#/references" role="doc-biblioref" onclick="">Margossian 2023</a>)</span></li>
-<li>Approximate filtering, possibly with importance sampling correction <span class="citation" data-cites="viholaImportanceSamplingType2020">(<a href="#/references" role="doc-biblioref" onclick="">Vihola, Helske, and Franks 2020</a>)</span>.</li>
-<li>Amortized inference <span class="citation" data-cites="habermannAmortizedBayesianMultilevel2025">(<a href="#/references" role="doc-biblioref" onclick="">Habermann et al. 2025</a>)</span>.</li>
+<li class="fragment">Laplace approximations which don’t cause autodiff to explode?? <span class="citation" data-cites="margossianGeneralAdjointdifferentiatedLaplace2023">(<a href="#/references" role="doc-biblioref" onclick="">Margossian 2023</a>)</span></li>
+<li class="fragment">Approximate filtering, possibly with importance sampling correction <span class="citation" data-cites="viholaImportanceSamplingType2020">(<a href="#/references" role="doc-biblioref" onclick="">Vihola, Helske, and Franks 2020</a>)</span>.</li>
+<li class="fragment">Amortized inference <span class="citation" data-cites="habermannAmortizedBayesianMultilevel2025">(<a href="#/references" role="doc-biblioref" onclick="">Habermann et al. 2025</a>)</span>.</li>
 </ul>
+</div>
 </section>
 <section id="preprints" class="slide level2">
 <h2>Preprints</h2>
@@ -392,6 +392,9 @@ Asparouhov, Tihomir, Ellen L. Hamaker, and Bengt Muthén. 2018. <span>“Dynamic
 </div>
 <div id="ref-cowlesAcceleratingMonteCarlo1996" class="csl-entry" role="listitem">
 Cowles, Mary Kathryn. 1996. <span>“Accelerating <span>Monte Carlo Markov</span> Chain Convergence for Cumulative-Link Generalized Linear Models.”</span> <em>Statistics and Computing</em> 6 (2): 101–11. <a href="https://doi.org/10.1007/BF00162520">https://doi.org/10.1007/BF00162520</a>.
+</div>
+<div id="ref-fruhwirth-schnatterDataAugmentationDynamic1994" class="csl-entry" role="listitem">
+Frühwirth-Schnatter, Sylvia. 1994. <span>“Data <span>Augmentation</span> and <span>Dynamic Linear Models</span>.”</span> <em>Journal of Time Series Analysis</em> 15 (2): 183–202. <a href="https://doi.org/10.1111/j.1467-9892.1994.tb00184.x">https://doi.org/10.1111/j.1467-9892.1994.tb00184.x</a>.
 </div>
 <div id="ref-habermannAmortizedBayesianMultilevel2025" class="csl-entry" role="listitem">
 Habermann, Daniel, Marvin Schmitt, Lars Kühmichel, Andreas Bulling, Stefan T. Radev, and Paul-Christian Bürkner. 2025. <span>“Amortized <span>Bayesian Multilevel Models</span>.”</span> <em>Bayesian Analysis</em> -1 (-1): 1–30. <a href="https://doi.org/10.1214/25-BA1570">https://doi.org/10.1214/25-BA1570</a>.
@@ -469,7 +472,7 @@ Vihola, Matti, Jouni Helske, and Jordan Franks. 2020. <span>“Importance Sampli
         progress: true,
 
         // Display the page number of the current slide
-        slideNumber: false,
+        slideNumber: 'c/t',
 
         // 'all', 'print', or 'speaker'
         showSlideNumber: 'all',
@@ -652,67 +655,6 @@ Vihola, Matti, Jouni Helske, and Jordan Franks. 2020. <span>“Importance Sampli
       tabsets.forEach(function(tabset) {
         const tabby = new Tabby('#' + tabset.id);
       });
-      const isCodeAnnotation = (el) => {
-        for (const clz of el.classList) {
-          if (clz.startsWith('code-annotation-')) {                     
-            return true;
-          }
-        }
-        return false;
-      }
-      const onCopySuccess = function(e) {
-        // button target
-        const button = e.trigger;
-        // don't keep focus
-        button.blur();
-        // flash "checked"
-        button.classList.add('code-copy-button-checked');
-        var currentTitle = button.getAttribute("title");
-        button.setAttribute("title", "Copied!");
-        let tooltip;
-        if (window.bootstrap) {
-          button.setAttribute("data-bs-toggle", "tooltip");
-          button.setAttribute("data-bs-placement", "left");
-          button.setAttribute("data-bs-title", "Copied!");
-          tooltip = new bootstrap.Tooltip(button, 
-            { trigger: "manual", 
-              customClass: "code-copy-button-tooltip",
-              offset: [0, -8]});
-          tooltip.show();    
-        }
-        setTimeout(function() {
-          if (tooltip) {
-            tooltip.hide();
-            button.removeAttribute("data-bs-title");
-            button.removeAttribute("data-bs-toggle");
-            button.removeAttribute("data-bs-placement");
-          }
-          button.setAttribute("title", currentTitle);
-          button.classList.remove('code-copy-button-checked');
-        }, 1000);
-        // clear code selection
-        e.clearSelection();
-      }
-      const getTextToCopy = function(trigger) {
-          const codeEl = trigger.previousElementSibling.cloneNode(true);
-          for (const childEl of codeEl.children) {
-            if (isCodeAnnotation(childEl)) {
-              childEl.remove();
-            }
-          }
-          return codeEl.innerText;
-      }
-      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
-        text: getTextToCopy
-      });
-      clipboard.on('success', onCopySuccess);
-      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
-          text: getTextToCopy,
-          container: window.document.getElementById('quarto-embedded-source-code-modal')
-        });
-        clipboardModal.on('success', onCopySuccess);
-      }
         var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
         var mailtoRegex = new RegExp(/^mailto:/);
           var filterRegex = new RegExp('/' + window.location.host + '/');
@@ -812,6 +754,21 @@ Vihola, Matti, Jouni Helske, and Jordan Franks. 2020. <span>“Importance Sampli
         }
       }
     });
+    </script>
+    <script>
+    (function() {
+      function toggleFooter() {
+        var f = document.querySelector(".reveal > .footer");
+        if (!f || typeof Reveal === "undefined") return;
+        var i = Reveal.getIndices();
+        f.style.display = (i.h === 0 && i.v === 0) ? "none" : "block";
+      }
+      if (typeof Reveal !== "undefined") {
+        Reveal.on("slidechanged", toggleFooter);
+        Reveal.on("ready", toggleFooter);
+        if (Reveal.isReady()) toggleFooter();
+      }
+    })();
     </script>
     
 

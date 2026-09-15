@@ -1,16 +1,26 @@
 ---
 title: "Scalable Computational Algorithms for Dynamic Structural Equation Models"
 author: "Øystein Sørensen"
-affiliation: "Department of Psychology, University of Oslo"
 format:
+  dtslides-revealjs:
+    slide-number: c/t
   revealjs:
     html-math-method: mathjax
 bibliography: references.bib
 ---
 
-# Dynamic Structural Equation Models
+# Dynamic Structural Equation Models (DSEM)
 
-DSEM, multilevel dynamic factor models [@asparouhovDynamicStructuralEquation2018].
+Multilevel models for intensive longitudinal data
+[@asparouhovDynamicStructuralEquation2018]
+
+## Response
+
+$$\boldsymbol{y}_{it}$$
+
+. . .
+
+![](ild_illustration.png)
 
 ## Response decomposition
 
@@ -21,60 +31,51 @@ $$
 
 ## Within-level model
 
+Measurement model:
 
 $$
-\begin{aligned}
-        \boldsymbol{y}_{1,it}    & = \boldsymbol{\nu}_{1,it} + \boldsymbol{\Lambda}_{1,it}(L) \boldsymbol{\eta}_{1,it} + \boldsymbol{R}_{it}(L) \boldsymbol{y}_{1,it} + \boldsymbol{K}_{1,it} \boldsymbol{X}_{1,it} + \boldsymbol{\epsilon}_{1,it} \\
-        \boldsymbol{\eta}_{1,it} & = \boldsymbol{\alpha}_{1,it} + \boldsymbol{B}_{1,it}(L) \boldsymbol{\eta}_{1,it} + \boldsymbol{Q}_{it}(L) \boldsymbol{y}_{1,it} + \boldsymbol{\Gamma}_{1,it} \boldsymbol{X}_{1,it} + \boldsymbol{\xi}_{1,it},
-    \end{aligned}
+\boldsymbol{y}_{1,it}     = \boldsymbol{\nu}_{1,it} + \boldsymbol{\Lambda}_{1,it}(K) \boldsymbol{\eta}_{1,it} + \boldsymbol{R}_{it}(K) \boldsymbol{y}_{1,it} + \boldsymbol{K}_{1,it} \boldsymbol{X}_{1,it} + \boldsymbol{\epsilon}_{1,it} 
 $$
 
-. . .
-
-where
+Structural model:
 
 $$
-\begin{aligned}
-&\boldsymbol{\Lambda}_{1,it}(L) = \sum_{l=0}^{L} \boldsymbol{\Lambda}_{1,lit} L^{l}, \quad \boldsymbol{R}_{it}(L) = \sum_{l=0}^{L} \boldsymbol{R}_{lit} L^{l}, \\
-&\quad  \boldsymbol{B}_{1,it}(L) = \sum_{l=0}^{L} \boldsymbol{B}_{1,lit} L^{l}, \quad \boldsymbol{Q}_{it}(L) = \sum_{l=0}^{L} \boldsymbol{Q}_{lit} L^{l}
-\end{aligned}
+\boldsymbol{\eta}_{1,it}  = \boldsymbol{\alpha}_{1,it} + \boldsymbol{B}_{1,it}(K) \boldsymbol{\eta}_{1,it} + \boldsymbol{Q}_{it}(K) \boldsymbol{y}_{1,it} + \boldsymbol{\Gamma}_{1,it} \boldsymbol{X}_{1,it} + \boldsymbol{\xi}_{1,it}
 $$
 
-## Between-participants model
 
+with polynomial matrices $\boldsymbol{X}(L) = \sum_{l=0}^{K} \boldsymbol{X}_{l} L^{l}$.
 
-$$
-\begin{aligned}
-        \boldsymbol{y}_{2,i}    & = \boldsymbol{\nu}_{2} + \boldsymbol{\Lambda}_{2} \boldsymbol{\eta}_{2,i} + \boldsymbol{K}_{2}\boldsymbol{X}_{2,i} + \boldsymbol{\epsilon}_{2,i} \\
-        \boldsymbol{\eta}_{2,i} & = \boldsymbol{\alpha}_{2} + \boldsymbol{B}_{2} \boldsymbol{\eta}_{2,i} + \boldsymbol{\Gamma}_{2} \boldsymbol{X}_{2,i} + \boldsymbol{\xi}_{2,i},
-    \end{aligned}
-$$
+## Further components
 
-## Between-timepoints model
-
-
-$$
-\begin{aligned}
-        \boldsymbol{y}_{3,t}    & = \boldsymbol{\nu}_{3} + \boldsymbol{\Lambda}_{3} \boldsymbol{\eta}_{3,t} + \boldsymbol{K}_{3} \boldsymbol{X}_{3,t} + \boldsymbol{\epsilon}_{3,t} \\
-        \boldsymbol{\eta}_{3,t} & = \boldsymbol{\alpha}_{3} + \boldsymbol{B}_{3}\boldsymbol{\eta}_{3,t} + \boldsymbol{\Gamma}_{3}\boldsymbol{X}_{3,t} + \boldsymbol{\xi}_{3,t}.
-    \end{aligned}
-$$
+- Between-participants model
+- Between-timepoints model
+- Priors for population-level parameters
 
 # Estimation of DSEMs
 
 ## Original algorithm (Mplus)
 
-- Sample population-level parameters: $\mathcal{O}(1)$
-- Sample individual-specific parameters: $\mathcal{O}(N)$
-- Sample timepoint-specific parameters: $\mathcal{O}(T)$
-- Sample within-level latent traits: $\mathcal{O}(N \times T)$
+13-block Metropolis-within-Gibbs, which samples:
+
+- $\mathcal{O}(1)$ population-level parameters.
+- $\mathcal{O}(N)$ individual-specific parameters.
+- $\mathcal{O}(T)$ timepoint-specific parameters.
+- $\mathcal{O}(N \times T)$ within-level latent traits.
 
 Stan implementations [@holtmannModelingWithinlevelLatent2025] have used the same set-up.
 
-# Can we scale it better?
+## Practical Consequence
+
+- Define the dynamics in terms of latent traits and use a measurement model, and you'll need to sample $\mathcal{O}(N \times T)$ parameters in each MCMC iteration.
+- Define the dynamics in terms of sumscores, and you'll need to sample $\mathcal{O}(N + T)$ parameters in each MCMC iteration.
+
+
+# Can we do better?
 
 ## Theorem
 
+Within-level model
 
 $$
 \begin{aligned}
@@ -85,7 +86,7 @@ $$
 
 . . .
 
-can be written as a linear Gaussian state-space model
+can be written as a linear Gaußian state-space model
 
 $$
 \begin{aligned}
@@ -95,15 +96,19 @@ $$
     \end{aligned}
 $$
 
-after some pretty tedious algebra.
+with augmented latent states $\tilde{\boldsymbol{\eta}}_{1,it}$ after some pretty tedious algebra.
 
-## Marginalization
+## Marginal HMC
 
-Having the within-level model on state-space form lets us:
+Using the theorem we can:
 
-- Integrate out the within-level latent variables with a Kalman filter.
-- Use a sampler which targets the marginal posterior.
-- From $\mathcal{O}(N \times T)$ down to $\mathcal{O}(N + T)$.
+:::{.incremental}
+
+- Exactly and deterministically integrate over the latent variables using a Kalman filter.
+- Target the marginal posterior with Hamiltonian Monte Carlo.
+- Sample $\mathcal{O}(N + T)$ rather than $\mathcal{O}(N \times T)$ and hence make latent variable modeling feasible.
+
+:::
 
 # Experiments
 
@@ -157,12 +162,7 @@ $$
 $$
 \begin{aligned}
         \boldsymbol{y}_{1,it}    & =
-        \begin{bmatrix}
-            \lambda_{1,it} & 0 \\
-            \lambda_{2,it} & 0 \\
-            \lambda_{3,it} & 0 \\
-            0              & 1
-        \end{bmatrix}
+        \boldsymbol{\Lambda}_{it}
         \boldsymbol{\eta}_{1,it}
         + \boldsymbol{\epsilon}_{1,it} , \quad \boldsymbol{\epsilon}_{1,it} \sim \mathcal{N}(\boldsymbol{0}, \boldsymbol{\Sigma}_{1,i})                                              \\
         \boldsymbol{\eta}_{1,it} & = \boldsymbol{\Phi}_{1,i} \boldsymbol{\eta}_{1,i,t-1} + \boldsymbol{\xi}_{1,it}, \quad \boldsymbol{\xi}_{1,it} \sim \mathcal{N}(\boldsymbol{0}, \boldsymbol{\Psi}_{1,i}),
@@ -175,21 +175,21 @@ Loadings vary both between timepoints and between individuals. Model from @mcnei
 
 ![](eg5-efficiency.png)
 
-# Beyond Conditionally Gaussian
+# Beyond Conditionally Gaußian
 
 ## Hybrid NUTS-Gibbs Sampler
 
-For categorical responses we can use a similar state-space formulation and do:
+For categorical responses we can combine two Gibbs steps with one NUTS step:
 
-1. **Gibbs**: sample within-level latent trait using FFBS.
-2. **Data augmentation**: sample latent responses from the normal distribution with a probit link [@albertBayesianAnalysisBinary1993] or the Pólya-Gamma distribution with a logit link [@polsonBayesianInferenceLogistic2013].
-3. **NUTS**: run one step of NUTS targeting the marginal posterior.
+- Gibbs 1: Sample within-level latent trait using forward-filtering backward sampling [@fruhwirth-schnatterDataAugmentationDynamic1994].
+2. Gibbs 2: Sample latent responses from truncated normal [@albertBayesianAnalysisBinary1993] or Pólya-Gamma distribution [@polsonBayesianInferenceLogistic2013].
+3. NUTS/HMC: Run one step targeting the marginal posterior with latent responses.
 
 ## Hybrid NUTS-Gibbs Sampler
 
-- Stan does not support HMC-within-Gibbs. Using NumPyro instead.
-- Works well for binary responses.
-- Fails completely for ordinal responses, due to a well-known issue [@cowlesAcceleratingMonteCarlo1996].
+- Still $\mathcal{O}(N \times T)$ due to latent responses.
+- Cannot use Stan, but NumPyro is a really good alternative.
+- Useless for ordinal responses because thresholds are extremely correlated with latent responses [@cowlesAcceleratingMonteCarlo1996].
 
 ## Five-Indiciator Binary-Response AR(1) 
 
@@ -203,15 +203,17 @@ For categorical responses we can use a similar state-space formulation and do:
 
 # Going Further
 
-Ordinal responses is the main use case of DSEM and the only published algorithm is @asparouhovDynamicStructuralEquation2018 which scales $\mathcal{O}(N \times T)$.
+Ordinal responses is the dominating use case and still lacks good algorithms.
 
-## Ordinal Data DSEM
+## Ordinal DSEM
 
-Better computational scaling likely requires compromise:
+Better computational scaling requires compromise:
 
+:::{.incremental}
 - Laplace approximations which don't cause autodiff to explode?? [@margossianGeneralAdjointdifferentiatedLaplace2023]
 - Approximate filtering, possibly with importance sampling correction [@viholaImportanceSamplingType2020].
 - Amortized inference [@habermannAmortizedBayesianMultilevel2025].
+:::
 
 ## Preprints
 
