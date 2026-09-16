@@ -167,6 +167,7 @@
 <p><span class="math display">\[\boldsymbol{y}_{it}\]</span></p>
 <div class="fragment">
 <p><img data-src="ild_illustration.png"></p>
+<p>Image from <a href="https://siweiliu.weebly.com/">https://siweiliu.weebly.com/</a>.</p>
 </div>
 </section>
 <section id="response-decomposition" class="slide level2">
@@ -185,7 +186,10 @@
 <p><span class="math display">\[
 \boldsymbol{\eta}_{1,it}  = \boldsymbol{\alpha}_{1,it} + \boldsymbol{B}_{1,it}(K) \boldsymbol{\eta}_{1,it} + \boldsymbol{Q}_{it}(K) \boldsymbol{y}_{1,it} + \boldsymbol{\Gamma}_{1,it} \boldsymbol{X}_{1,it} + \boldsymbol{\xi}_{1,it}
 \]</span></p>
-<p>with polynomial matrices <span class="math inline">\(\boldsymbol{X}(L) = \sum_{l=0}^{K} \boldsymbol{X}_{l} L^{l}\)</span>.</p>
+<p>with polynomial matrices <span class="math inline">\(\boldsymbol{X}(K) = \sum_{l=0}^{K} \boldsymbol{X}_{l} L^{l}\)</span>, e.g.,</p>
+<p><span class="math display">\[
+\boldsymbol{\Lambda}_{1,it}(K) \boldsymbol{\eta}_{1,it} = \sum_{l=0}^{K} \boldsymbol{\Lambda}_{1,itl} \boldsymbol{\eta}_{1,i,t-l}
+\]</span></p>
 </section>
 <section id="further-components" class="slide level2">
 <h2>Further components</h2>
@@ -209,7 +213,7 @@
 <li><span class="math inline">\(\mathcal{O}(T)\)</span> timepoint-specific parameters.</li>
 <li><span class="math inline">\(\mathcal{O}(N \times T)\)</span> within-level latent traits.</li>
 </ul>
-<p>Stan implementations <span class="citation" data-cites="holtmannModelingWithinlevelLatent2025">(<a href="#/references" role="doc-biblioref" onclick="">Holtmann and Koslowski 2025</a>)</span> have used the same set-up.</p>
+<p>Stan implementations using Hamiltonian Monte Carlo also available <span class="citation" data-cites="holtmannModelingWithinlevelLatent2025">(<a href="#/references" role="doc-biblioref" onclick="">Holtmann and Koslowski 2025</a>)</span>.</p>
 </section>
 <section id="practical-consequence" class="slide level2">
 <h2>Practical Consequence</h2>
@@ -228,8 +232,8 @@
 <p>Within-level model</p>
 <p><span class="math display">\[
 \begin{aligned}
-        \boldsymbol{y}_{1,it}    &amp; = \boldsymbol{\nu}_{1,it} + \boldsymbol{\Lambda}_{1,it}(L) \boldsymbol{\eta}_{1,it} + \boldsymbol{R}_{it}(L) \boldsymbol{y}_{1,it} + \boldsymbol{K}_{1,it} \boldsymbol{X}_{1,it} + \boldsymbol{\epsilon}_{1,it} \\
-        \boldsymbol{\eta}_{1,it} &amp; = \boldsymbol{\alpha}_{1,it} + \boldsymbol{B}_{1,it}(L) \boldsymbol{\eta}_{1,it} + \boldsymbol{Q}_{it}(L) \boldsymbol{y}_{1,it} + \boldsymbol{\Gamma}_{1,it} \boldsymbol{X}_{1,it} + \boldsymbol{\xi}_{1,it},
+        \boldsymbol{y}_{1,it}    &amp; = \boldsymbol{\nu}_{1,it} + \boldsymbol{\Lambda}_{1,it}(K) \boldsymbol{\eta}_{1,it} + \boldsymbol{R}_{it}(K) \boldsymbol{y}_{1,it} + \boldsymbol{K}_{1,it} \boldsymbol{X}_{1,it} + \boldsymbol{\epsilon}_{1,it} \\
+        \boldsymbol{\eta}_{1,it} &amp; = \boldsymbol{\alpha}_{1,it} + \boldsymbol{B}_{1,it}(K) \boldsymbol{\eta}_{1,it} + \boldsymbol{Q}_{it}(K) \boldsymbol{y}_{1,it} + \boldsymbol{\Gamma}_{1,it} \boldsymbol{X}_{1,it} + \boldsymbol{\xi}_{1,it},
     \end{aligned}
 \]</span></p>
 <div class="fragment">
@@ -237,11 +241,10 @@
 <p><span class="math display">\[
 \begin{aligned}
         \boldsymbol{y}_{1,it}               &amp; = \boldsymbol{Z}_{it} \tilde{\boldsymbol{\eta}}_{1,it} + \boldsymbol{d}_{it} + \boldsymbol{v}_{it}, \quad \boldsymbol{v}_{it} \sim \mathcal{N}\left(\boldsymbol{0}, \boldsymbol{H}_{it}\right)                      \\
-        \tilde{\boldsymbol{\eta}}_{1,i,t+1} &amp; = \boldsymbol{T}_{it} \tilde{\boldsymbol{\eta}}_{1,it} + \boldsymbol{c}_{it} + \boldsymbol{w}_{it}, \quad \boldsymbol{w}_{it} \sim \mathcal{N}\left(\boldsymbol{0}, \boldsymbol{W}_{it}\right),  \\
-        \tilde{\boldsymbol{\eta}}_{1,i1}    &amp; = \boldsymbol{\xi}_{i}, \quad \boldsymbol{\xi}_{i} \sim \mathcal{N}\left(\boldsymbol{a}_{i1}, \boldsymbol{P}_{i1}\right),
+        \tilde{\boldsymbol{\eta}}_{1,i,t+1} &amp; = \boldsymbol{T}_{it} \tilde{\boldsymbol{\eta}}_{1,it} + \boldsymbol{c}_{it} + \boldsymbol{w}_{it}, \quad \boldsymbol{w}_{it} \sim \mathcal{N}\left(\boldsymbol{0}, \boldsymbol{W}_{it}\right),
     \end{aligned}
 \]</span></p>
-<p>with augmented latent states <span class="math inline">\(\tilde{\boldsymbol{\eta}}_{1,it}\)</span> after some pretty tedious algebra.</p>
+<p>where <span class="math inline">\(\boldsymbol{Z}_{it}\)</span>, <span class="math inline">\(\boldsymbol{d}_{it}\)</span>, <span class="math inline">\(\boldsymbol{H}_{it}\)</span>, <span class="math inline">\(\boldsymbol{T}_{it}\)</span>, <span class="math inline">\(\boldsymbol{c}_{it}\)</span>, and <span class="math inline">\(\boldsymbol{W}_{it}\)</span> are functions of “higher-level parameters”.</p>
 </div>
 </section>
 <section id="marginal-hmc" class="slide level2">
@@ -268,7 +271,7 @@
         \eta_{1,it} &amp; = \phi_{2,i} \eta_{1,i,t-1} + \xi_{1,it}, \quad \xi_{1,it} \sim \mathcal{N}(0,\psi_{2,i}^{2}),
     \end{aligned}
 \]</span></p>
-<p>Intercept <span class="math inline">\(\eta_{2,i}\)</span>, autoregression <span class="math inline">\(\phi_{2,i}\)</span>, and variances <span class="math inline">\(\sigma_{2,i}^{2}\)</span> and <span class="math inline">\(\phi_{2,i}^{2}\)</span> varying between participants.</p>
+<p>where intercept <span class="math inline">\(\eta_{2,i}\)</span>, autoregression <span class="math inline">\(\phi_{2,i}\)</span>, and variances <span class="math inline">\(\sigma_{2,i}^{2}\)</span> and <span class="math inline">\(\phi_{2,i}^{2}\)</span> vary between participants.</p>
 </section>
 <section id="multilevel-scalar-latent-ar1-1" class="slide level2">
 <h2>Multilevel Scalar Latent AR(1)</h2>
@@ -363,7 +366,7 @@
 <p>Better computational scaling requires compromise:</p>
 <div>
 <ul>
-<li class="fragment">Laplace approximations which don’t cause autodiff to explode?? <span class="citation" data-cites="margossianGeneralAdjointdifferentiatedLaplace2023">(<a href="#/references" role="doc-biblioref" onclick="">Margossian 2023</a>)</span></li>
+<li class="fragment">Clever combination of Laplace approximation and autodiff? <span class="citation" data-cites="margossianGeneralAdjointdifferentiatedLaplace2023">(<a href="#/references" role="doc-biblioref" onclick="">Margossian 2023</a>)</span></li>
 <li class="fragment">Approximate filtering, possibly with importance sampling correction <span class="citation" data-cites="viholaImportanceSamplingType2020">(<a href="#/references" role="doc-biblioref" onclick="">Vihola, Helske, and Franks 2020</a>)</span>.</li>
 <li class="fragment">Amortized inference <span class="citation" data-cites="habermannAmortizedBayesianMultilevel2025">(<a href="#/references" role="doc-biblioref" onclick="">Habermann et al. 2025</a>)</span>.</li>
 </ul>
