@@ -21,7 +21,9 @@ Multilevel models for intensive longitudinal data
 
 ![](ild_illustration.png){fig-align="center"}
 
-Repeat for $N$ participants.
+---
+
+![](ild_illustration_n.png){fig-align="center"}
 
 ## Response decomposition
 
@@ -38,12 +40,15 @@ $$
 \boldsymbol{y}_{1,it}     = \boldsymbol{\nu}_{1,it} + \boldsymbol{\Lambda}_{1,it}(K) \boldsymbol{\eta}_{1,it} + \boldsymbol{R}_{it}(K) \boldsymbol{y}_{1,it} + \boldsymbol{K}_{1,it} \boldsymbol{X}_{1,it} + \boldsymbol{\epsilon}_{1,it} 
 $$
 
+. . .
+
 Structural model:
 
 $$
 \boldsymbol{\eta}_{1,it}  = \boldsymbol{\alpha}_{1,it} + \boldsymbol{B}_{1,it}(K) \boldsymbol{\eta}_{1,it} + \boldsymbol{Q}_{it}(K) \boldsymbol{y}_{1,it} + \boldsymbol{\Gamma}_{1,it} \boldsymbol{X}_{1,it} + \boldsymbol{\xi}_{1,it}
 $$
 
+. . .
 
 with polynomial matrices $\boldsymbol{X}(K) = \sum_{l=0}^{K} \boldsymbol{X}_{l} L^{l}$, e.g.,
 
@@ -54,7 +59,21 @@ $$
 ## Further components
 
 - Between-participants model
+$$
+\begin{aligned}
+        \boldsymbol{y}_{2,i}    & = \boldsymbol{\nu}_{2} + \boldsymbol{\Lambda}_{2} \boldsymbol{\eta}_{2,i} + \boldsymbol{K}_{2}\boldsymbol{X}_{2,i} + \boldsymbol{\epsilon}_{2,i} \\
+        \boldsymbol{\eta}_{2,i} & = \boldsymbol{\alpha}_{2} + \boldsymbol{B}_{2} \boldsymbol{\eta}_{2,i} + \boldsymbol{\Gamma}_{2} \boldsymbol{X}_{2,i} + \boldsymbol{\xi}_{2,i},
+    \end{aligned}
+$$
+
 - Between-timepoints model
+$$
+\begin{aligned}
+        \boldsymbol{y}_{3,t}    & = \boldsymbol{\nu}_{3} + \boldsymbol{\Lambda}_{3} \boldsymbol{\eta}_{3,t} + \boldsymbol{K}_{3} \boldsymbol{X}_{3,t} + \boldsymbol{\epsilon}_{3,t} \\
+        \boldsymbol{\eta}_{3,t} & = \boldsymbol{\alpha}_{3} + \boldsymbol{B}_{3}\boldsymbol{\eta}_{3,t} + \boldsymbol{\Gamma}_{3}\boldsymbol{X}_{3,t} + \boldsymbol{\xi}_{3,t}.
+    \end{aligned}
+$$
+
 - Priors for population-level parameters
 
 # Estimation of DSEMs
