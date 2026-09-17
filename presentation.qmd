@@ -1,6 +1,6 @@
 ---
 title: "Scalable Computational Algorithms for Dynamic Structural Equation Models"
-author: "Øystein Sørensen"
+author: "Øystein Sørensen and Ethan M. McCormick"
 format:
   dtslides-revealjs:
     slide-number: c/t
@@ -14,15 +14,14 @@ bibliography: references.bib
 Multilevel models for intensive longitudinal data
 [@asparouhovDynamicStructuralEquation2018]
 
-## Response
 
-$$\boldsymbol{y}_{it}$$
+---
 
-. . .
 
-![](ild_illustration.png)
 
-Image from [https://siweiliu.weebly.com/](https://siweiliu.weebly.com/).
+![](ild_illustration.png){fig-align="center"}
+
+Repeat for $N$ participants.
 
 ## Response decomposition
 
