@@ -12,7 +12,7 @@ bibliography: references.bib
 # Dynamic Structural Equation Models (DSEM)
 
 Multilevel models for intensive longitudinal data
-[@asparouhovDynamicStructuralEquation2018]
+[@asparouhovDynamicStructuralEquation2018] (1474 citations in Google Scholar)
 
 
 ---
